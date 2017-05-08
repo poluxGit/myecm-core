@@ -1,0 +1,10 @@
+{
+	"DATABASE-PDO-INVALID"                : "Database Handler is invalid!",
+  "DATABASE-PDO-CONNECTION"             : "Database initialization failed! (message:'%s').",
+	"DATABASE-LOAD-OBJECT"             		: "Error during loading of Object with UID:'%s'. (message:'%s').",
+	"DATABASE-STORE-OBJECT"            		: "Error during storage of Object. (message: '%s').",
+  "APPLICATION-SETTINGS-FILE-LOADING"   : "Error during Settings file loading (filepath:'%s')",
+  "APPLICATION-INIT"                    : "Error during Application initialisation! (reason:'%s').",
+	"VAULT-INIT"                    			: "Error during Vault initialisation! (reason:'%s').",
+	"SYNO-API-ERROR"                    			: "Error during Synology API Request. Code: %s (reason:'%s')."
+}

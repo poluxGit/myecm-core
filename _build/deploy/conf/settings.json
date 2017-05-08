@@ -1,0 +1,10 @@
+{
+  "database":{
+		"db-type"	  :"mysql",
+		"db-host"	  :"localhost",
+		"db-port"  	:"3306",
+		"db-user"	  :"root",
+		"db-pass"		:"Odomzhzf31?",
+		"db-schema"	:"mydocs"
+	}
+}
