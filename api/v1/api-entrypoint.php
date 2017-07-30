@@ -7,9 +7,12 @@
  */
 
  // Mandatory dependencies
- require_once './api.include.php';
+ require_once './api.inc.php';
+  require_once './../../core.inc.php';
 
  use Core\API as API;
+
+ Core\Application::initApplication();
 
 // Requests from the same server don't have a HTTP_ORIGIN header
 if (!array_key_exists('HTTP_ORIGIN', $_SERVER)) {
