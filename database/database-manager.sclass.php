@@ -12,34 +12,46 @@ namespace Core\Database;
 class DatabaseManager {
 
   /**
-   * PDO DB Handler
+   * Array of PDO DB Handler
    *
-   * @var \PDO
+   * @var array(\PDO)
    */
-  private static $_oPdoDBHanlder = null;
+  private static $_aDBPdoDBHanlder = [];
 
   /**
-   * setPDODBHandler
+   * registerDbPDODBHandler
    *
-   * Set application default Database Handler
+   * Register a new  PDO DB Handler
    * @static
-   * @param \PDO $pObjPDODBHandler  PDO DB Handler Object.
+   * @param \PDO    $pObjPDODBHandler   PDO DB Handler Object.
+   * @param string  $dbID               UID of Database Connection
    */
-  public static function setPDODBHandler(\PDO $pObjPDODBHandler)
+  public static function registerDbPDOHandler(\PDO $pObjPDODBHandler,$dbID=null)
   {
-    static::$_oPdoDBHanlder = $pObjPDODBHandler;
-  }//end setPDODBHandler()
+    // TODO Check existence dans le tableau avant allocation!
+    $ldbID = $dbID;
+    if($dbID === null)
+    {
+      $ldbID = 'DEFAULT';
+    }
+    static::$_aDBPdoDBHanlder[$ldbID] = $pObjPDODBHandler;
+  }//end registerDbPDODBHandler()
 
   /**
    * initDatabaseHandler
    *
-   * Initialize Application default Database Handler
+   * Returns  a PDO Database Handler initialized.
    * @static
    *
    */
-  public static function initDatabaseHandler(){
-      $dbh = new \PDO('mysql:host=polux-nas;port=3306;dbname=myecm','polux','Odomzhzf31');
-      static::setPDODBHandler($dbh);
+  public static function initDatabaseHandler($dsn,$login,$pass,$dbID=null){
+      $dbh = new \PDO($dsn,$login,$pass);
+
+      if(!is_null($dbID))
+      {
+        static::registerDbPDOHandler($dbh,$dbID);
+      }
+      return $dbh;
   }//end initDatabaseHandler()
 
   /**
@@ -47,16 +59,31 @@ class DatabaseManager {
    *
    * Returns Application Default Database Handler Object
    * @static
+   * @deprecated
    *
    * @return \PDO   DB Handler Object
    */
-  public static function getPDODatabaseHandler(){
-      if(static::$_oPdoDBHanlder === null)
-      {
-        static::initDatabaseHandler();
-      }
-      return static::$_oPdoDBHanlder;
+  public static function getPDODatabaseHandler_OLD(){
+    return static::getSpecificPDODatabaseHandler('DEFAULT');
   }//end getPDODatabaseHandler()
+
+  /**
+   * getSpecificPDODatabaseHandler
+   *
+   * Returns Specific  Database Handler Object
+   * @static
+   * @param string $dbInternalID  Internal ID of Database PDO Handler
+   * @throws \Exception If DB not founded or null.
+   *
+   * @return \PDO   DB Handler Object
+   */
+  public static function getPDODatabaseHandler($dbInternalID){
+    if(count(static::$_aDBPdoDBHanlder) === 0 || !array_key_exists($dbInternalID,static::$_aDBPdoDBHanlder) || static::$_aDBPdoDBHanlder[$dbInternalID] === null)
+    {
+      throw new \Exception(sprintf("DB Handler '%s' not founded or not initialized !.",$dbInternalID));
+    }
+    return static::$_aDBPdoDBHanlder[$dbInternalID];
+  }//end getSpecificPDODatabaseHandler()
 
 }//end class
 
